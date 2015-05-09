@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="HackGUIPackageSource:jar">
+    <output-path>$PROJECT_DIR$/InstallDir/bin/lib</output-path>
+    <root id="archive" name="HackGUI.jar">
+      <element id="module-output" name="HackGUIPackageSource" />
+    </root>
+  </artifact>
+</component>

@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="SimulatorsPackageSource:jar">
+    <output-path>$PROJECT_DIR$/InstallDir/bin/lib</output-path>
+    <root id="archive" name="Simulators.jar">
+      <element id="module-output" name="SimulatorsPackageSource" />
+    </root>
+  </artifact>
+</component>

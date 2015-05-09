@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="CompilersPackageSource:jar">
+    <output-path>$PROJECT_DIR$/InstallDir/bin/lib</output-path>
+    <root id="archive" name="Compilers.jar">
+      <element id="module-output" name="CompilersPackageSource" />
+      <element id="module-output" name="HackPackageSource" />
+    </root>
+  </artifact>
+</component>

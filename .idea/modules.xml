@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/BuiltInChipsSource/BuiltInChipsSource.iml" filepath="$PROJECT_DIR$/BuiltInChipsSource/BuiltInChipsSource.iml" />
+      <module fileurl="file://$PROJECT_DIR$/BuiltInVMCodeSource/BuiltInVMCodeSource.iml" filepath="$PROJECT_DIR$/BuiltInVMCodeSource/BuiltInVMCodeSource.iml" />
+      <module fileurl="file://$PROJECT_DIR$/CompilersPackageSource/CompilersPackageSource.iml" filepath="$PROJECT_DIR$/CompilersPackageSource/CompilersPackageSource.iml" />
+      <module fileurl="file://$PROJECT_DIR$/HackGUIPackageSource/HackGUIPackageSource.iml" filepath="$PROJECT_DIR$/HackGUIPackageSource/HackGUIPackageSource.iml" />
+      <module fileurl="file://$PROJECT_DIR$/HackPackageSource/HackPackageSource.iml" filepath="$PROJECT_DIR$/HackPackageSource/HackPackageSource.iml" />
+      <module fileurl="file://$PROJECT_DIR$/MainClassesSource/MainClassesSource.iml" filepath="$PROJECT_DIR$/MainClassesSource/MainClassesSource.iml" />
+      <module fileurl="file://$PROJECT_DIR$/SimulatorsGUIPackageSource/SimulatorsGUIPackageSource.iml" filepath="$PROJECT_DIR$/SimulatorsGUIPackageSource/SimulatorsGUIPackageSource.iml" />
+      <module fileurl="file://$PROJECT_DIR$/SimulatorsPackageSource/SimulatorsPackageSource.iml" filepath="$PROJECT_DIR$/SimulatorsPackageSource/SimulatorsPackageSource.iml" />
+    </modules>
+  </component>
+</project>
