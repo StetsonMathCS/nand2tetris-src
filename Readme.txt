@@ -17,9 +17,28 @@ mark your changes clearly, for the benefit of others.
 Contents
 --------
 
+0. Building and Running
 1. Directory Structure and Compilation Instructions
 2. The Chip API for Implementation of Chips in Java
 3. The VMCode API for Implementation of VM Functions/Classes in Java
+
+
+Building and Running:
+---------------------
+
+Building (required before Running):
+
+1. Clone the git repository.
+2. Install and open IntelliJ 14
+3. Open a project in IntelliJ, and choose the root of the git clone.
+4. Choose menu option "Build > Rebuild Project"
+5. Choose menu option "Build > Build Artifacts... > All Artifacts"
+
+Running:
+
+1. Open a console and change to nand2tetris-src/InstallDir folder.
+2. Run scripts VMEmulator.sh or HardwareSimulator.sh, etc.
+
 
 
 Directory Structure and Compilation Instructions:
