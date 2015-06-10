@@ -44,7 +44,7 @@ public class CPUEmulatorComponent extends HackSimulatorComponent implements CPUE
     private KeyboardComponent keyboard;
 
     // The memory of the CPUEmulator.
-    private PointedMemoryComponent ram;
+    private RAMComponent ram;
 
     // The ROM of the CPUEmulator.
     private ROMComponent rom;
@@ -62,7 +62,7 @@ public class CPUEmulatorComponent extends HackSimulatorComponent implements CPUE
     public CPUEmulatorComponent() {
         screen = new ScreenComponent();
         keyboard = new KeyboardComponent();
-        ram = new PointedMemoryComponent();
+        ram = new RAMComponent();
         ram.setName("RAM");
         rom = new ROMComponent();
         rom.setName("ROM");

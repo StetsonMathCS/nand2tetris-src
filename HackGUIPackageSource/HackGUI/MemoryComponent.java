@@ -73,10 +73,11 @@ public class MemoryComponent extends JPanel implements MemoryGUI {
     // Creating buttons and icons.
     protected MouseOverJButton  searchButton = new MouseOverJButton();
     protected MouseOverJButton clearButton = new MouseOverJButton();
-    protected MouseOverJButton loadButton = new MouseOverJButton();
     private ImageIcon searchIcon = new ImageIcon(Utilities.imagesDir + "find.gif");
     private ImageIcon clearIcon = new ImageIcon(Utilities.imagesDir + "smallnew.gif");
-    private ImageIcon loadIcon = new ImageIcon(Utilities.imagesDir + "open2.gif");
+
+    // The file filter of this component.
+    private FileFilter filter;
 
     // The file chooser component.
     private JFileChooser fileChooser;
@@ -141,8 +142,6 @@ public class MemoryComponent extends JPanel implements MemoryGUI {
         addresses = new String[0];
         valuesStr = new String[0];
         searchWindow = new SearchMemoryWindow(this, memoryTable);
-
-        fileChooser = new JFileChooser();
 
         jbInit();
     }
@@ -520,15 +519,6 @@ public class MemoryComponent extends JPanel implements MemoryGUI {
         setBorder(BorderFactory.createEtchedBorder());
         scrollPane.setLocation(0,27);
 
-        loadButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                loadButton_actionPerformed(e);
-            }
-        });
-        loadButton.setIcon(loadIcon);
-        loadButton.setBounds(new Rectangle(97, 2, 31, 25));
-        loadButton.setToolTipText("Load");
-
         clearButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 clearButton_actionPerformed(e);
@@ -541,7 +531,6 @@ public class MemoryComponent extends JPanel implements MemoryGUI {
         this.add(searchButton, null);
         this.add(nameLbl, null);
         this.add(clearButton, null);
-        this.add(loadButton, null);
     }
 
     /**
@@ -598,33 +587,6 @@ public class MemoryComponent extends JPanel implements MemoryGUI {
      */
     public void searchButton_actionPerformed(ActionEvent e) {
         searchWindow.showWindow();
-    }
-
-    /**
-     * Opens the file chooser for loading a new program.
-     */
-    public void loadRAM() {
-        int returnVal = fileChooser.showDialog(this, "Load RAM");
-        if(returnVal == JFileChooser.APPROVE_OPTION) {
-            try {
-                byte[] bytes = Files.readAllBytes(Paths.get(fileChooser.getSelectedFile().getAbsolutePath()));
-                short[] ram = new short[Definitions.RAM_SIZE];
-                for(int i = 0; i < bytes.length && i < ram.length; i++) {
-                    ram[i] = bytes[i];
-                }
-                setContents(ram);
-                System.out.println(bytes.length);
-            } catch(Exception e) {
-                System.out.println(e);
-            }
-        }
-    }
-
-    /**
-     * Implementing the action of pressing the search button.
-     */
-    public void loadButton_actionPerformed(ActionEvent e) {
-        loadRAM();
     }
 
     /**
