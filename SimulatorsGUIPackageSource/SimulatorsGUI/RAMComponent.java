@@ -174,7 +174,6 @@ public class RAMComponent extends PointedMemoryComponent {
                     }
                     myByteBuffer.put(lowerValues);
                     myByteBuffer.rewind();
-                    System.out.println(myByteBuffer);
                     out.write(myByteBuffer);
                 }
                 out.close();
