@@ -379,6 +379,8 @@ public class CPUEmulator extends HackSimulator implements ComputerPartErrorEvent
         return vars;
     }
 
+    public CPU getCPU() { return cpu; }
+
     protected HackSimulatorGUI getGUI() {
         return gui;
     }

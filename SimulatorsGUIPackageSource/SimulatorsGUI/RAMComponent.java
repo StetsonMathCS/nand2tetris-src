@@ -127,6 +127,7 @@ public class RAMComponent extends PointedMemoryComponent {
                 setContents(ram);
             } catch(Exception e) {
                 System.out.println(e);
+                e.printStackTrace();
             }
         }
     }
@@ -179,6 +180,7 @@ public class RAMComponent extends PointedMemoryComponent {
                 out.close();
             } catch(Exception e) {
                 System.out.println(e);
+                e.printStackTrace();
             }
         }
     }
