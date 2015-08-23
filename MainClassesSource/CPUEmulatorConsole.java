@@ -73,7 +73,7 @@ public class CPUEmulatorConsole implements Runnable {
             System.err.println("Usage: java CPUEmulatorConsole [Hack binary]");
         else {
             try {
-                UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+                UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
             } catch (Exception e) {
             }
 

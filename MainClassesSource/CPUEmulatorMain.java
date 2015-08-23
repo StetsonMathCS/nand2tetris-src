@@ -34,7 +34,7 @@ public class CPUEmulatorMain
             System.err.println("Usage: java CPUEmulatorMain [script name]");
         else if (args.length == 0) {
             try {
-                UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+                UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
             } catch (Exception e) {
             }
 
