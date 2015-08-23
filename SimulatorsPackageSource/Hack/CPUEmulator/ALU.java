@@ -110,7 +110,6 @@ public class ALU extends ValueComputerPart {
      * current command.
      */
     public synchronized void compute() {
-
         if (animate) {
             gui.bodyFlash();
             try {

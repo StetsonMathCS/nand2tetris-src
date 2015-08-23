@@ -19,6 +19,7 @@ package SimulatorsGUI;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
 import javax.swing.*;
 import Hack.CPUEmulator.*;
 import Hack.Utilities.*;
@@ -31,9 +32,14 @@ public class ScreenComponent extends JPanel implements ScreenGUI, ActionListener
     // the clock intervals for animation
     private static final int ANIMATION_CLOCK_INTERVALS = 50;
     private static final int STATIC_CLOCK_INTERVALS = 500;
+    private static final int screenOnColor = Color.black.getRGB();
+    private static final int screenOffColor = Color.white.getRGB();
 
     // The screen memory array
     private short[] data;
+
+    // Underlying image that is actually drawn onto
+    private BufferedImage img;
 
     // redraw flag
     private boolean redraw = true;
@@ -76,6 +82,13 @@ public class ScreenComponent extends JPanel implements ScreenGUI, ActionListener
             }
         }
 
+        img = new BufferedImage(Definitions.SCREEN_WIDTH, Definitions.SCREEN_HEIGHT, BufferedImage.TYPE_INT_RGB);
+        for(int i = 0; i < Definitions.SCREEN_WIDTH; i++) {
+            for(int j = 0; j < Definitions.SCREEN_HEIGHT; j++) {
+                img.setRGB(i, j, screenOffColor);
+            }
+        }
+
         timer = new Timer(STATIC_CLOCK_INTERVALS, this);
         timer.start();
     }
@@ -85,8 +98,19 @@ public class ScreenComponent extends JPanel implements ScreenGUI, ActionListener
      * (Assumes legal index)
      */
     public void setValueAt(int index, short value) {
-        data[index] = value;
-        redraw = true;
+        if(data[index] != value) {
+            data[index] = value;
+            int v;
+            int x = index * 16 % Definitions.SCREEN_WIDTH;
+            int y = index / 32;
+            for(int i = 0; i < 16; i++) {
+                v = (value >> i) & 1; // get last bit, after shifting
+                int rgb = (v == 1 ? screenOnColor : screenOffColor);
+                img.setRGB(x, y, rgb);
+                x++;
+            }
+            redraw = true;
+        }
     }
 
     /**
@@ -146,24 +170,7 @@ public class ScreenComponent extends JPanel implements ScreenGUI, ActionListener
      * Called when the screen needs to be painted.
      */
     public void paintComponent(Graphics g) {
-
         super.paintComponent(g);
-
-        for (int i = 0; i < Definitions.SCREEN_SIZE; i++) {
-            if (data[i] != 0) {
-                if (data[i] == 0xffff) // draw a full line
-                    g.drawLine(x[i], y[i], x[i] + 15, y[i]);
-                else {
-                    short value = data[i];
-                    for (int j = 0; j < 16; j++) {
-                        if ((value & 0x1) == 1)
-                            // since there's no drawPixel, uses drawLine to draw one pixel
-                            g.drawLine(x[i] + j, y[i], x[i] + j, y[i]);
-
-                        value = (short)(value >> 1);
-                    }
-                }
-            }
-        }
+        g.drawImage(img, 0, 0, null);
     }
 }

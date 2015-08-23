@@ -53,6 +53,10 @@ public class RAM extends PointedMemory
         this.screen = screenGUI;
     }
 
+    public void setScreenGUI(ScreenGUI screenGUI) {
+        this.screen = screenGUI;
+    }
+
     /**
      * Returns the value stored at the given address
      */

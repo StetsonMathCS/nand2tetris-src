@@ -16,6 +16,7 @@
  ********************************************************************************/
 
 import Hack.CPUEmulator.*;
+import Hack.Controller.HackController;
 import Hack.Utilities.Definitions;
 import SimulatorsGUI.ScreenComponent;
 
@@ -28,12 +29,46 @@ import java.io.File;
 /**
  * The CPU Emulator.
  */
-public class CPUEmulatorConsole
-{
-  /**
-   * The command line CPU Emulator program, as a console (no debugging).
-   */
-  public static void main(String[] args) throws Exception {
+public class CPUEmulatorConsole implements Runnable {
+
+    private CPU cpu;
+
+    public CPUEmulatorConsole(CPU cpu) {
+        this.cpu = cpu;
+    }
+
+    public synchronized void run() {
+        try {
+            System.runFinalization();
+            System.gc();
+            wait(300);
+        } catch (InterruptedException ie) {
+        }
+        int count = 0;
+        int rounds = HackController.FASTFORWARD_SPEED_FUNCTION[3];
+
+        while(true) {
+            try {
+                cpu.executeInstruction();
+                notifyAll();
+                // waits for 1 ms each constant amount of commands
+                if (count == rounds) {
+                    count = 0;
+                    try {
+                        wait(1);
+                    } catch (InterruptedException ie) {}
+                }
+                count++;
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    /**
+     * The command line CPU Emulator program, as a console (no debugging).
+     */
+    public static void main(String[] args) throws Exception {
         if (args.length != 1)
             System.err.println("Usage: java CPUEmulatorConsole [Hack binary]");
         else {
@@ -44,13 +79,13 @@ public class CPUEmulatorConsole
 
             CPUEmulator cpuEmulator = new CPUEmulator();
             CPU cpu = cpuEmulator.getCPU();
+            cpu.disableAssemblerTranslator();
             final RAM ram = cpu.getRAM();
-            short[] ramContents;
 
             cpuEmulator.setWorkingDir(new File("."));
 
             ScreenComponent screen = new ScreenComponent();
-            short[] screenContents = new short[Definitions.SCREEN_SIZE];
+            ram.setScreenGUI(screen);
 
             JFrame frame = new JFrame(args[0]);
             frame.setLayout(new BorderLayout());
@@ -67,28 +102,22 @@ public class CPUEmulatorConsole
 
                 @Override
                 public void keyPressed(KeyEvent e) {
-                    ram.setValueAt(Definitions.KEYBOARD_ADDRESS, (short)e.getKeyCode(), true);
+                    ram.setValueAt(Definitions.KEYBOARD_ADDRESS, (short) e.getKeyCode(), true);
                 }
 
                 @Override
                 public void keyReleased(KeyEvent e) {
-                    ram.setValueAt(Definitions.KEYBOARD_ADDRESS, (short)0, true);
+                    ram.setValueAt(Definitions.KEYBOARD_ADDRESS, (short) 0, true);
                 }
             });
 
-            System.out.println("Loading Hack binary " + args[0]);
+            System.out.println("Loading program " + args[0]);
             cpuEmulator.doCommand(new String[]{"load", args[0]});
-            while(true) {
-                // read keyboard
 
-                cpu.executeInstruction();
-                // update screen contents by reading RAM
-                ramContents = ram.getContents();
-                for(int i = Definitions.SCREEN_START_ADDRESS; i < Definitions.SCREEN_END_ADDRESS; i++) {
-                    screenContents[(short) (i - Definitions.SCREEN_START_ADDRESS)] = ramContents[i];
-                }
-                screen.setContents(screenContents);
-            }
+
+            Thread t = new Thread(new CPUEmulatorConsole(cpu));
+            t.start();
         }
     }
+
 }

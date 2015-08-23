@@ -72,6 +72,8 @@ public class CPU
         assemblerTranslator = HackAssemblerTranslator.getInstance();
     }
 
+    public void disableAssemblerTranslator() { assemblerTranslator = null; }
+
     /**
      * Returns the bus.
      */
@@ -192,10 +194,15 @@ public class CPU
         boolean f = (instruction & 0x0080) > 0;
         boolean no = (instruction & 0x0040) > 0;
 
-        try {
-            alu.setCommand(assemblerTranslator.getExpByCode((short)(instruction & 0xffc0)),
-                           zd, nd, zm, nm, f, no);
-        } catch (AssemblerException ae) {}
+        if(assemblerTranslator == null) {
+            alu.setCommand(null, zd, nd, zm, nm, f, no);
+        } else {
+            try {
+                alu.setCommand(assemblerTranslator.getExpByCode((short) (instruction & 0xffc0)),
+                        zd, nd, zm, nm, f, no);
+            } catch (AssemblerException ae) {
+            }
+        }
 
         bus.send(D, 0, alu, 0); // sends D to input0 of the alu
 
