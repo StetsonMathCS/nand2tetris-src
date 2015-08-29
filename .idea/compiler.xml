@@ -18,5 +18,15 @@
         <processorPath useClasspath="true" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel target="1.5">
+      <module name="BuiltInChipsSource" target="1.5" />
+      <module name="BuiltInVMCodeSource" target="1.5" />
+      <module name="CompilersPackageSource" target="1.5" />
+      <module name="HackGUIPackageSource" target="1.5" />
+      <module name="HackPackageSource" target="1.5" />
+      <module name="MainClassesSource" target="1.5" />
+      <module name="SimulatorsGUIPackageSource" target="1.5" />
+      <module name="SimulatorsPackageSource" target="1.5" />
+    </bytecodeTargetLevel>
   </component>
 </project>
