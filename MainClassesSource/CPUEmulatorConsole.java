@@ -29,12 +29,24 @@ import java.io.File;
 /**
  * The CPU Emulator.
  */
-public class CPUEmulatorConsole implements Runnable {
+public class CPUEmulatorConsole extends JFrame implements Runnable {
 
     private CPU cpu;
+    private RAM ram;
+    private ScreenComponent screen;
 
-    public CPUEmulatorConsole(CPU cpu) {
+    public CPUEmulatorConsole(String title, CPU cpu, RAM ram, ScreenComponent screen) {
+        super(title);
         this.cpu = cpu;
+        this.ram = ram;
+        this.screen = screen;
+        KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
+        manager.addKeyEventDispatcher(new MyDispatcher());
+        setLayout(new BorderLayout());
+        add(this.screen, BorderLayout.CENTER);
+        pack();
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setVisible(true);
     }
 
     public synchronized void run() {
@@ -65,6 +77,30 @@ public class CPUEmulatorConsole implements Runnable {
         }
     }
 
+    private class MyDispatcher implements KeyEventDispatcher {
+        public boolean dispatchKeyEvent(KeyEvent e) {
+            if (e.getID() == KeyEvent.KEY_PRESSED) {
+                //System.out.println("keyCode: " + e.getKeyCode());
+                short keyCode = 0;
+                // translate Java keycode to Hack keycode
+                switch(e.getKeyCode()) {
+                    case 37: keyCode = 130; break; // left
+                    case 38: keyCode = 131; break; // up
+                    case 39: keyCode = 132; break; // right
+                    case 40: keyCode = 133; break; // down
+                    case 8: keyCode = 129; break; // backspace
+                    case 10: keyCode = 128; break; // newline
+                    // TODO: handle the rest
+                    default: keyCode = (short)e.getKeyCode(); break;
+                }
+                ram.setValueAt(Definitions.KEYBOARD_ADDRESS, (short) keyCode, true);
+            } else if (e.getID() == KeyEvent.KEY_RELEASED) {
+                ram.setValueAt(Definitions.KEYBOARD_ADDRESS, (short) 0, true);
+            }
+            return false;
+        }
+    }
+
     /**
      * The command line CPU Emulator program, as a console (no debugging).
      */
@@ -80,42 +116,17 @@ public class CPUEmulatorConsole implements Runnable {
             CPUEmulator cpuEmulator = new CPUEmulator();
             CPU cpu = cpuEmulator.getCPU();
             cpu.disableAssemblerTranslator();
-            final RAM ram = cpu.getRAM();
+            RAM ram = cpu.getRAM();
 
             cpuEmulator.setWorkingDir(new File("."));
 
             ScreenComponent screen = new ScreenComponent();
             ram.setScreenGUI(screen);
 
-            JFrame frame = new JFrame(args[0]);
-            frame.setLayout(new BorderLayout());
-            frame.add(screen, BorderLayout.CENTER);
-            frame.pack();
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.setVisible(true);
-
-            frame.addKeyListener(new KeyListener() {
-                @Override
-                public void keyTyped(KeyEvent e) {
-                    // do nothing
-                }
-
-                @Override
-                public void keyPressed(KeyEvent e) {
-                    ram.setValueAt(Definitions.KEYBOARD_ADDRESS, (short) e.getKeyCode(), true);
-                }
-
-                @Override
-                public void keyReleased(KeyEvent e) {
-                    ram.setValueAt(Definitions.KEYBOARD_ADDRESS, (short) 0, true);
-                }
-            });
-
             System.out.println("Loading program " + args[0]);
             cpuEmulator.doCommand(new String[]{"load", args[0]});
 
-
-            Thread t = new Thread(new CPUEmulatorConsole(cpu));
+            Thread t = new Thread(new CPUEmulatorConsole(args[0], cpu, ram, screen));
             t.start();
         }
     }

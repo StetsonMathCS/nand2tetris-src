@@ -98,19 +98,18 @@ public class ScreenComponent extends JPanel implements ScreenGUI, ActionListener
      * (Assumes legal index)
      */
     public void setValueAt(int index, short value) {
-        if(data[index] != value) {
-            data[index] = value;
-            int v;
-            int x = index * 16 % Definitions.SCREEN_WIDTH;
-            int y = index / 32;
-            for(int i = 0; i < 16; i++) {
-                v = (value >> i) & 1; // get last bit, after shifting
-                int rgb = (v == 1 ? screenOnColor : screenOffColor);
-                img.setRGB(x, y, rgb);
-                x++;
-            }
-            redraw = true;
+        data[index] = value;
+        int v;
+        int x = index * 16 % Definitions.SCREEN_WIDTH;
+        int y = index / 32;
+        for(int i = 0; i < 16; i++) {
+            v = (value >> i) & 1; // get last bit, after shifting
+            int rgb = (v == 1 ? screenOnColor : screenOffColor);
+            img.setRGB(x, y, rgb);
+            x++;
         }
+        redraw = true;
+        refresh(); // force the repaint; results in smoother drawing
     }
 
     /**

@@ -253,7 +253,7 @@ public class CPUEmulator extends HackSimulator implements ComputerPartErrorEvent
             if (command.length != 2)
                 throw new CommandException("Illegal number of arguments to command", command);
 
-            String fileName = workingDir.getAbsolutePath() + "/" + command[1];
+            String fileName = (command[1].startsWith("/") ? command[1] : workingDir.getAbsolutePath() + "/" + command[1]);
             cpu.getROM().loadProgram(fileName);
             int oldAnimationMode = animationMode;
             setAnimationMode(HackController.DISPLAY_CHANGES);
